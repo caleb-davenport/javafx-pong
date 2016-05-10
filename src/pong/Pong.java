@@ -55,9 +55,7 @@ public class Pong extends Application {
                     break;
             }
 
-            if (DEBUG) {
-                System.out.println(event.getCode());
-            }
+            if (DEBUG) System.out.println("PRESSED: " + event.getCode());
         });
         scene.setOnKeyReleased((KeyEvent event) -> {
             KeyCode key = event.getCode();
@@ -77,9 +75,7 @@ public class Pong extends Application {
                     break;
             }
 
-            if (DEBUG) {
-                System.out.println(event.getCode());
-            }
+            if (DEBUG) System.out.println("RELEASED: " + event.getCode());
         });
         new AnimationTimer() {
             @Override

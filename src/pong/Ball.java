@@ -1,5 +1,6 @@
 package pong;
 
+import javafx.scene.Group;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
 import static pong.Pong.*;
@@ -8,18 +9,32 @@ import static pong.Pong.*;
  * 
  * @author Caleb Davenport
  */
-public class Ball extends Circle {
+public class Ball extends Group {
     private static final int DEFAULT_SIZE = 10;
     private static final double DEFAULT_SPEED = 5.0;
     private double X, Y, velX, velY;
+    private final Circle ball = new Circle();
+    public final Rectangle collision = new Rectangle();
+    
     Ball(int r, double speed) {
         double[] velocity = startingVelocity(speed);
         X = SCENE_X/2.0;
         Y = SCENE_Y/2.0;
-        super.setRadius(r);
-        super.setFill(Color.web("#FFF"));
-        super.setCenterX(X);
-        super.setCenterY(Y);
+        ball.setRadius(r);
+        ball.setFill(Color.web("#FFF"));
+        super.setTranslateX(X);
+        super.setTranslateY(Y);
+        collision.setFill(new Color(1, 1, 1, 0));
+        if (DEBUG) {
+            collision.setHeight(r*2);
+            collision.setWidth(r*2);
+            collision.setX(-r);
+            collision.setY(-r);
+            collision.setStroke(Color.GREEN);
+            collision.setStrokeWidth(2);
+            super.getChildren().add(collision);
+        }
+        super.getChildren().add(ball);
         
         velX = velocity[0];
         velY = velocity[1];
@@ -46,7 +61,7 @@ public class Ball extends Circle {
     public void updatePosition() {
         X += velX;
         Y += velY;
-        super.setCenterX(X);
-        super.setCenterY(Y);
+        super.setTranslateX(X);
+        super.setTranslateY(Y);
     }
 }

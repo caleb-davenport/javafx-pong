@@ -25,6 +25,10 @@ public class Paddle extends Rectangle {
         super.setHeight(height);
         super.setWidth(width);
         super.setFill(Color.web("#FFF"));
+        if (DEBUG) {
+            super.setStroke(Color.GREEN);
+            super.setStrokeWidth(2);
+        }
     }
     Paddle(boolean isLeft) {
         this(DEFAULT_HEIGHT, DEFAULT_WIDTH, isLeft);
