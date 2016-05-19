@@ -12,7 +12,7 @@ public class Field extends Group {
     private final ArrayList<Ball> ballList = new ArrayList<>();
     public final Paddle leftPaddle = new Paddle(true);
     public final Paddle rightPaddle = new Paddle(false);
-    
+
     Field() {
         addBall();
         super.getChildren().add(rightPaddle);
@@ -21,6 +21,8 @@ public class Field extends Group {
 
     public void updateField() {
         for (Ball b : ballList) {
+            b.velXFlip(leftPaddle);
+            b.velXFlip(rightPaddle);
             b.updatePosition();
         }
         rightPaddle.updatePosition();
