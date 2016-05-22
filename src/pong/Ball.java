@@ -75,4 +75,8 @@ public class Ball extends Group {
     public void velXFlip(Paddle paddle) {
         if (paddle.intersects(super.getBoundsInParent())) velX *= -1;
     }
+    
+    public boolean outOfBounds() {
+        return X < -20 || X > SCENE_X + 20;
+    }
 }

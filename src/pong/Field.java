@@ -24,6 +24,11 @@ public class Field extends Group {
             b.velXFlip(leftPaddle);
             b.velXFlip(rightPaddle);
             b.updatePosition();
+            if (b.outOfBounds()) {
+                ballList.remove(b);
+                super.getChildren().remove(b);
+                addBall();
+            }
         }
         rightPaddle.updatePosition();
         leftPaddle.updatePosition();
