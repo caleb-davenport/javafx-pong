@@ -15,10 +15,10 @@ public class Paddle extends Rectangle {
     private double X, Y, velX, velY;
     private double height, width;
     Paddle(int height, int width, boolean isLeft) {
-        if (isLeft) X = SCENE_X * 0.05;
-        else        X = SCENE_X * 0.95;
         this.height = height;
         this.width = width;
+        if (isLeft) X = SCENE_X * 0.05 - width;
+        else        X = SCENE_X * 0.95;
         Y = (SCENE_Y / 2) - (height / 2);
         super.setX(X);
         super.setY(Y);
