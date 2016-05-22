@@ -61,6 +61,11 @@ public class Ball extends Group {
         velocity[1] = Y;
         return velocity;
     }
+    
+    private void increaseSpeed(double factor) {
+        velX *= factor;
+        velY *= factor;
+    }
 
     public void updatePosition() {
         if (Y <= 0 + ball.getRadius() || Y >= SCENE_Y - ball.getRadius()) {
@@ -73,7 +78,10 @@ public class Ball extends Group {
     }
 
     public void velXFlip(Paddle paddle) {
-        if (paddle.intersects(super.getBoundsInParent())) velX *= -1;
+        if (paddle.intersects(super.getBoundsInParent())) {
+            velX *= -1;
+            increaseSpeed(1.05);
+        }
     }
     
     public boolean outOfBounds() {
