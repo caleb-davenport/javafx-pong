@@ -40,19 +40,9 @@ public class Pong extends Application {
                 return;
             }
             inputList.add(key);
-            switch (key) {
-                case UP:
-                    field.rightPaddle.moveUp(true);
-                    break;
-                case DOWN:
-                    field.rightPaddle.moveDown(true);
-                    break;
-                case Q:
-                    field.leftPaddle.moveUp(true);
-                    break;
-                case A:
-                    field.leftPaddle.moveDown(true);
-                    break;
+            for (Paddle p : field.paddleList) {
+                if (key.equals(p.upKey)) p.moveUp(true);
+                if (key == p.downKey)    p.moveDown(true);
             }
 
             if (DEBUG) System.out.println("PRESSED: " + event.getCode());
@@ -60,19 +50,9 @@ public class Pong extends Application {
         scene.setOnKeyReleased((KeyEvent event) -> {
             KeyCode key = event.getCode();
             inputList.remove(key);
-            switch (key) {
-                case UP:
-                    field.rightPaddle.moveUp(false);
-                    break;
-                case DOWN:
-                    field.rightPaddle.moveDown(false);
-                    break;
-                case Q:
-                    field.leftPaddle.moveUp(false);
-                    break;
-                case A:
-                    field.leftPaddle.moveDown(false);
-                    break;
+            for (Paddle p : field.paddleList) {
+                if (key == p.upKey)   p.moveUp(false);
+                if (key == p.downKey) p.moveDown(false);
             }
 
             if (DEBUG) System.out.println("RELEASED: " + event.getCode());

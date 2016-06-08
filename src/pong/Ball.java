@@ -1,5 +1,6 @@
 package pong;
 
+import java.util.ArrayList;
 import javafx.scene.Group;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
@@ -14,6 +15,7 @@ public class Ball extends Group {
     private static final int DEFAULT_SIZE = 10;
     private static final double DEFAULT_SPEED = 5.0;
     private double X, Y, velX, velY;
+    private boolean canBounce, contact;
     private final Circle ball = new Circle();
     public final Rectangle collision = new Rectangle();
 
@@ -61,7 +63,7 @@ public class Ball extends Group {
         velocity[1] = Y;
         return velocity;
     }
-    
+
     private void increaseSpeed(double factor) {
         velX *= factor;
         velY *= factor;
@@ -77,13 +79,25 @@ public class Ball extends Group {
         super.setTranslateY(Y);
     }
 
-    public void velXFlip(Paddle paddle) {
-        if (paddle.intersects(super.getBoundsInParent())) {
-            velX *= -1;
-            increaseSpeed(1.05);
+    public void velXFlip(ArrayList<Paddle> paddleList) {
+        contact = false;
+        for (Paddle p : paddleList) {
+            if (p.getBoundsInParent().intersects(super.getBoundsInParent())) {
+                if (canBounce) {
+                    if (p.isLeft) {
+                        velX = Math.abs(velX);
+                    } else {
+                        velX = -Math.abs(velX);
+                    }
+                    increaseSpeed(1.05);
+                    canBounce = false;
+                }
+                contact = true;
+            }
         }
+        if (!contact) canBounce = true;
     }
-    
+
     public boolean outOfBounds() {
         return X < -20 || X > SCENE_X + 20;
     }

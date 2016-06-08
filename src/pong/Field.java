@@ -2,6 +2,7 @@ package pong;
 
 import java.util.ArrayList;
 import javafx.scene.Group;
+import javafx.scene.input.KeyCode;
 
 /**
  *
@@ -10,19 +11,17 @@ import javafx.scene.Group;
 public class Field extends Group {
 
     private final ArrayList<Ball> ballList = new ArrayList<>();
-    public final Paddle leftPaddle = new Paddle(true);
-    public final Paddle rightPaddle = new Paddle(false);
+    public final ArrayList<Paddle> paddleList = new ArrayList<>();
 
     Field() {
         addBall();
-        super.getChildren().add(rightPaddle);
-        super.getChildren().add(leftPaddle);
+        addPaddle(true, KeyCode.Q, KeyCode.A);
+        addPaddle(false, KeyCode.UP, KeyCode.DOWN);
     }
 
     public void updateField() {
         for (Ball b : ballList) {
-            b.velXFlip(leftPaddle);
-            b.velXFlip(rightPaddle);
+            b.velXFlip(paddleList);
             b.updatePosition();
             if (b.outOfBounds()) {
                 ballList.remove(b);
@@ -30,10 +29,19 @@ public class Field extends Group {
                 addBall();
             }
         }
-        rightPaddle.updatePosition();
-        leftPaddle.updatePosition();
+        for (Paddle p : paddleList) {
+            p.updatePosition();
+        }
     }
 
+    public final void addPaddle(boolean isLeft, KeyCode up, KeyCode down) {
+        Paddle p = new Paddle(isLeft);
+        p.upKey = up;
+        p.downKey = down;
+        paddleList.add(p);
+        super.getChildren().add(p);
+    }
+    
     public final void addBall() {
         Ball newBall = new Ball();
         ballList.add(newBall);
