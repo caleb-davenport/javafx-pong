@@ -84,11 +84,7 @@ public class Ball extends Group {
         for (Paddle p : paddleList) {
             if (p.getBoundsInParent().intersects(super.getBoundsInParent())) {
                 if (canBounce) {
-                    if (p.isLeft) {
-                        velX = Math.abs(velX);
-                    } else {
-                        velX = -Math.abs(velX);
-                    }
+                    velX *= -1;
                     increaseSpeed(1.05);
                     canBounce = false;
                 }

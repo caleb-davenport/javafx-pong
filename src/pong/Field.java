@@ -9,6 +9,7 @@ import javafx.scene.input.KeyCode;
  * @author Caleb Davenport
  */
 public class Field extends Group {
+    boolean gameInProgress = false;
 
     private final ArrayList<Ball> ballList = new ArrayList<>();
     public final ArrayList<Paddle> paddleList = new ArrayList<>();
@@ -20,6 +21,7 @@ public class Field extends Group {
     }
 
     public void updateField() {
+        if (!gameInProgress) return;
         for (Ball b : ballList) {
             b.velXFlip(paddleList);
             b.updatePosition();
@@ -46,5 +48,8 @@ public class Field extends Group {
         Ball newBall = new Ball();
         ballList.add(newBall);
         super.getChildren().add(newBall);
+    }
+    public void start() {
+        gameInProgress = true;
     }
 }

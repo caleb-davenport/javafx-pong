@@ -17,16 +17,19 @@ public class Pong extends Application {
 
     public static final int SCENE_X = 800;
     public static final int SCENE_Y = 600;
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
+    Stage primaryStage = new Stage();
+    Field field = new Field();
+    Menu menu = new Menu();
+    Scene gameScene = new Scene(field, SCENE_X, SCENE_Y, Color.BLACK);
+    Scene menuScene = new Scene(menu, SCENE_X, SCENE_Y, Color.BLACK);
 
     @Override
     public void start(Stage primaryStage) {
-        Field field = new Field();
-
-        Scene scene = new Scene(field, SCENE_X, SCENE_Y, Color.BLACK);
+        primaryStage = this.primaryStage;
 
         primaryStage.setTitle("Pong");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(menuScene);
 
         //final long startNanoTime = System.nanoTime();
         ArrayList<KeyCode> inputList = new ArrayList<>();
@@ -34,7 +37,7 @@ public class Pong extends Application {
         //Default Keys for now
         // UP and DOWN for right paddle
         // Q  and A    for left paddle
-        scene.setOnKeyPressed((KeyEvent event) -> {
+        gameScene.setOnKeyPressed((KeyEvent event) -> {
             KeyCode key = event.getCode();
             if (inputList.contains(key)) {
                 return;
@@ -47,7 +50,7 @@ public class Pong extends Application {
 
             if (DEBUG) System.out.println("PRESSED: " + event.getCode());
         });
-        scene.setOnKeyReleased((KeyEvent event) -> {
+        gameScene.setOnKeyReleased((KeyEvent event) -> {
             KeyCode key = event.getCode();
             inputList.remove(key);
             for (Paddle p : field.paddleList) {
@@ -57,14 +60,21 @@ public class Pong extends Application {
 
             if (DEBUG) System.out.println("RELEASED: " + event.getCode());
         });
+        
         new AnimationTimer() {
             @Override
             public void handle(long currentNanoTime) {
                 field.updateField();
+                if (menu.updateMenu()) menuToGame();
             }
         }.start();
 
         primaryStage.show();
+    }
+    
+    public void menuToGame() {
+        primaryStage.setScene(gameScene);
+        field.start();
     }
 
     /**
