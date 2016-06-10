@@ -24,49 +24,36 @@
 
 package pong;
 
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
-import static pong.Pong.*;
+import static pong.Pong.SCENE_X;
 
 /**
- *
+ * 
  * @author Caleb Davenport
  */
-public class Menu extends Group {
-    boolean startGame = false;
-    private final Label start;
-
-    Menu() {
-        start = new Label("Start");
-        start.setTextFill(Color.BLACK);
-        start.setFont(Font.font(30));
-        start.setTextAlignment(TextAlignment.CENTER);
-        start.setTranslateX(SCENE_X/2);
-        start.setTranslateY(SCENE_Y/2 - 25);
-        
-        start.setMouseTransparent(true);
-        Rectangle r = new Rectangle(SCENE_X/2 - 100, SCENE_Y/2 - 25, 200, 50);
-        r.setFill(Color.WHITE);
-        super.getChildren().addAll(r, start);
-        MouseHandler h = new MouseHandler();
-        r.setOnMousePressed(h);
+public class Score extends Group {
+    private int score;
+    private final Label textScore;
+    
+    Score(boolean isPlayer1) {
+        textScore = new Label("0");
+        textScore.setTextFill(Color.RED);
+        textScore.setFont(Font.font(30));
+        textScore.setTranslateY(50);
+        if (isPlayer1) textScore.setTranslateX(SCENE_X*0.1);
+        else           textScore.setTranslateX(SCENE_X*0.9);
+        super.getChildren().add(textScore);
     }
-    class MouseHandler implements EventHandler<MouseEvent> {
-        @Override
-        public void handle(MouseEvent e) {
-            startGame = true;
-        }
+    
+    public int getScore() {
+        return score;
     }
-    public boolean updateMenu() {
-        if (startGame) return true;
-        
-        return false;
+    
+    public void incrementScore() {
+        score += 1;
+        textScore.setText(Integer.toString(score));
     }
 }

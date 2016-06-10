@@ -118,7 +118,8 @@ public class Ball extends Group {
         if (!contact) canBounce = true;
     }
 
-    public boolean outOfBounds() {
-        return X < -20 || X > SCENE_X + 20;
+    public boolean outOfBounds(boolean isLeft) {
+        if (isLeft)  return X < -20;
+        else return X > SCENE_X + 20;
     }
 }

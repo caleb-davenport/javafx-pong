@@ -21,38 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pong;
 
 import java.util.ArrayList;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
+import static pong.Pong.SCENE_X;
 
 /**
  *
  * @author Caleb Davenport
  */
 public class Field extends Group {
+
     boolean gameInProgress = false;
 
     private final ArrayList<Ball> ballList = new ArrayList<>();
     public final ArrayList<Paddle> paddleList = new ArrayList<>();
 
+    Score player1score = new Score(true);
+    Score player2score = new Score(false);
+
     Field() {
         addBall();
         addPaddle(true, KeyCode.Q, KeyCode.A);
         addPaddle(false, KeyCode.UP, KeyCode.DOWN);
+        addScores();
     }
 
     public void updateField() {
-        if (!gameInProgress) return;
+        if (!gameInProgress) {
+            return;
+        }
         for (Ball b : ballList) {
             b.velXFlip(paddleList);
             b.updatePosition();
-            if (b.outOfBounds()) {
-                ballList.remove(b);
-                super.getChildren().remove(b);
-                addBall();
+            if (b.outOfBounds(true)) {
+                player2score.incrementScore();
+                newball(b);
+            }
+            if (b.outOfBounds(false)) {
+                player1score.incrementScore();
+                newball(b);
             }
         }
         for (Paddle p : paddleList) {
@@ -67,12 +77,23 @@ public class Field extends Group {
         paddleList.add(p);
         super.getChildren().add(p);
     }
-    
+
+    public final void newball(Ball b) {
+        ballList.remove(b);
+        super.getChildren().remove(b);
+        addBall();
+    }
+
     public final void addBall() {
         Ball newBall = new Ball();
         ballList.add(newBall);
         super.getChildren().add(newBall);
     }
+
+    public final void addScores() {
+        super.getChildren().addAll(player1score, player2score);
+    }
+
     public void start() {
         gameInProgress = true;
     }
