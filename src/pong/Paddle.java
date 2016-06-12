@@ -55,7 +55,7 @@ public class Paddle extends Group {
         super.setTranslateY(Y);
         paddle.setHeight(height);
         paddle.setWidth(width);
-        paddle.setFill(Color.web("#FFF5"));
+        paddle.setFill(Color.web("#BBB"));
         if (DEBUG) {
             paddle.setStroke(Color.GREEN);
             paddle.setStrokeWidth(2);

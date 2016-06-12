@@ -26,7 +26,10 @@ package pong;
 import java.util.ArrayList;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import static pong.Pong.SCENE_X;
+import static pong.Pong.SCENE_Y;
 
 /**
  *
@@ -43,10 +46,11 @@ public class Field extends Group {
     Score player2score = new Score(false);
 
     Field() {
+        addMiddle();
+        addScores();
         addBall();
         addPaddle(true, KeyCode.Q, KeyCode.A);
         addPaddle(false, KeyCode.UP, KeyCode.DOWN);
-        addScores();
     }
 
     public void updateField() {
@@ -96,5 +100,13 @@ public class Field extends Group {
 
     public void start() {
         gameInProgress = true;
+    }
+    public final void addMiddle() {
+        Rectangle r = new Rectangle();
+        r.setX(SCENE_X/2 - 1);
+        r.setHeight(SCENE_Y);
+        r.setWidth(2);
+        r.setFill(Color.web("111"));
+        super.getChildren().add(r);
     }
 }
