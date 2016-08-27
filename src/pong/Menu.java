@@ -25,9 +25,11 @@
 package pong;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -41,22 +43,30 @@ import static pong.Pong.*;
  */
 public class Menu extends Group {
     boolean startGame = false;
-    private final Label start;
+    private final VBox start;
+    private final Label startLabel;
 
     Menu() {
-        start = new Label("Start");
-        start.setTextFill(Color.BLACK);
-        start.setFont(Font.font(30));
-        start.setTextAlignment(TextAlignment.CENTER);
-        start.setTranslateX(SCENE_X/2);
+        startLabel = new Label("Start");
+        start = new VBox();
+        Rectangle r = new Rectangle(200, 50);
+        MouseHandler h = new MouseHandler();
+        
+        start.setAlignment(Pos.CENTER);
+        start.setTranslateX(SCENE_X/2 - 100);
         start.setTranslateY(SCENE_Y/2 - 25);
         
-        start.setMouseTransparent(true);
-        Rectangle r = new Rectangle(SCENE_X/2 - 100, SCENE_Y/2 - 25, 200, 50);
+        startLabel.setTextFill(Color.BLACK);
+        startLabel.setFont(Font.font(30));
+        startLabel.setTextAlignment(TextAlignment.CENTER);
+        startLabel.setTranslateY(-50);
+        startLabel.setMouseTransparent(true);
+        
         r.setFill(Color.WHITE);
-        super.getChildren().addAll(r, start);
-        MouseHandler h = new MouseHandler();
         r.setOnMousePressed(h);
+        
+        start.getChildren().addAll(r, startLabel);
+        super.getChildren().addAll(start);
     }
     class MouseHandler implements EventHandler<MouseEvent> {
         @Override
