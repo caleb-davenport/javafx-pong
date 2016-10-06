@@ -38,6 +38,8 @@ import static pong.Pong.SCENE_Y;
 public class Field extends Group {
 
     boolean gameInProgress = false;
+    boolean fieldVisible = false;
+    TimerVisual countdownTimer = new TimerVisual(3);
 
     private final ArrayList<Ball> ballList = new ArrayList<>();
     public final ArrayList<Paddle> paddleList = new ArrayList<>();
@@ -49,12 +51,21 @@ public class Field extends Group {
         addMiddle();
         addScores();
         addBall();
+        addCountdown();
         addPaddle(true, KeyCode.Q, KeyCode.A);
         addPaddle(false, KeyCode.UP, KeyCode.DOWN);
     }
 
     public void updateField() {
+        if (!fieldVisible) {
+            return;
+        }
+        for (Paddle p : paddleList) {
+            p.updatePosition();
+        }
+
         if (!gameInProgress) {
+            gameInProgress = countdownTimer.getFinishStatus();
             return;
         }
         for (Ball b : ballList) {
@@ -68,9 +79,6 @@ public class Field extends Group {
                 player1score.incrementScore();
                 newball(b);
             }
-        }
-        for (Paddle p : paddleList) {
-            p.updatePosition();
         }
     }
 
@@ -99,11 +107,20 @@ public class Field extends Group {
     }
 
     public void start() {
-        gameInProgress = true;
+        fieldVisible = countdownTimer.startAnimation();
     }
+
+    public final void addCountdown() {
+        super.getChildren().addAll(countdownTimer);
+    }
+    
+    public final void removeCountdown() {
+        super.getChildren().remove(countdownTimer);
+    }
+
     public final void addMiddle() {
         Rectangle r = new Rectangle();
-        r.setX(SCENE_X/2 - 1);
+        r.setX(SCENE_X / 2 - 1);
         r.setHeight(SCENE_Y);
         r.setWidth(2);
         r.setFill(Color.web("111"));
