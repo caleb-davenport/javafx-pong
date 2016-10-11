@@ -21,14 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package pong;
 
-import javafx.animation.AnimationTimer;
-import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
@@ -44,7 +42,7 @@ import static pong.Pong.SCENE_X;
  *
  * @author Caleb Davenport
  */
-public class TimerVisual extends Group {
+public class Timer extends Group {
 
     private final Label textScore;
     private int number;
@@ -52,7 +50,7 @@ public class TimerVisual extends Group {
     Timeline timeline = new Timeline();
     VBox VBox = new VBox();
 
-    TimerVisual(int number) {
+    Timer(int number) {
         this.number = number;
         textScore = new Label(Integer.toString(number));
         textScore.setTextFill(Color.WHITE);

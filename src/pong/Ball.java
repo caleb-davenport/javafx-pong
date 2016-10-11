@@ -25,9 +25,11 @@
 package pong;
 
 import java.util.ArrayList;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
-import javafx.scene.paint.*;
-import javafx.scene.shape.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import static pong.Pong.*;
 
 /**
@@ -38,88 +40,84 @@ public class Ball extends Group {
 
     private static final int DEFAULT_SIZE = 10;
     private static final double DEFAULT_SPEED = 5.0;
-    private double X, Y, velX, velY;
-    private boolean canBounce, contact;
+    private double XPosition, YPosition, XVelocity, YVelocity;
+    private boolean canBounce;
     private final Circle ball = new Circle();
-    public final Rectangle collision = new Rectangle();
+    private final Rectangle collisionRepresentation = new Rectangle();
 
     Ball(int r, double speed) {
-        double[] velocity = startingVelocity(speed);
-        X = SCENE_X / 2.0;
-        Y = SCENE_Y / 2.0;
+        setStartingVelocity(speed);
+        XPosition = SCENE_X / 2.0;
+        YPosition = SCENE_Y / 2.0;
         ball.setRadius(r);
         ball.setFill(Color.web("#FFF"));
-        super.setTranslateX(X);
-        super.setTranslateY(Y);
-        collision.setFill(new Color(1, 1, 1, 0));
+        super.setTranslateX(XPosition);
+        super.setTranslateY(YPosition);
         if (DEBUG) {
-            collision.setHeight(r * 2);
-            collision.setWidth(r * 2);
-            collision.setX(-r);
-            collision.setY(-r);
-            collision.setStroke(Color.GREEN);
-            collision.setStrokeWidth(2);
-            super.getChildren().add(collision);
+            collisionRepresentation.setHeight(r * 2);
+            collisionRepresentation.setWidth(r * 2);
+            collisionRepresentation.setX(-r);
+            collisionRepresentation.setY(-r);
+            collisionRepresentation.setStroke(Color.GREEN);
+            collisionRepresentation.setStrokeWidth(2);
+            super.getChildren().add(collisionRepresentation);
         }
         super.getChildren().add(ball);
-
-        velX = velocity[0];
-        velY = velocity[1];
     }
 
     Ball() {
         this(DEFAULT_SIZE, DEFAULT_SPEED);
     }
 
-    private double[] startingVelocity(double speed) {
-        final double rawX = 0.25;
-        double rawY, unitX, unitY, X, Y;
-        double[] velocity = new double[2];
+    private void setStartingVelocity(double speed) {
+        double rawX, rawY, unitX, unitY;
+        rawX = 0.25;
         rawY = Math.random() - 0.5;
         unitX = rawX / Math.sqrt(Math.pow(rawX, 2) + Math.pow(rawY, 2));
         unitY = rawY / Math.sqrt(Math.pow(rawX, 2) + Math.pow(rawY, 2));
-        X = speed * unitX;
-        Y = speed * unitY;
-        if (Math.random() > 0.5) {
-            X *= -1;
-        }
-        velocity[0] = X;
-        velocity[1] = Y;
-        return velocity;
+        XVelocity = speed * unitX;
+        YVelocity = speed * unitY;
+        if (Math.random() > 0.5) XVelocity *= -1;
     }
 
     private void increaseSpeed(double factor) {
-        velX *= factor;
-        velY *= factor;
+        XVelocity *= factor;
+        YVelocity *= factor;
+    }
+    
+    private boolean contactWithPaddle(Paddle p) {
+        Bounds paddleBounds = p.getBoundsInParent();
+        Bounds ballBounds =   super.getBoundsInParent();
+        return paddleBounds.intersects(ballBounds);
     }
 
-    public void updatePosition() {
-        if (Y <= 0 + ball.getRadius() || Y >= SCENE_Y - ball.getRadius()) {
-            velY *= -1;
+    public final void updatePosition() {
+        if (YPosition <= 0 + ball.getRadius() || YPosition >= SCENE_Y - ball.getRadius()) {
+            YVelocity *= -1;
         }
-        X += velX;
-        Y += velY;
-        super.setTranslateX(X);
-        super.setTranslateY(Y);
+        XPosition += XVelocity;
+        YPosition += YVelocity;
+        super.setTranslateX(XPosition);
+        super.setTranslateY(YPosition);
     }
 
     public void velXFlip(ArrayList<Paddle> paddleList) {
-        contact = false;
+        boolean contactWithPaddle = false;
         for (Paddle p : paddleList) {
-            if (p.getBoundsInParent().intersects(super.getBoundsInParent())) {
+            if (contactWithPaddle(p)) {
+                contactWithPaddle = true;
                 if (canBounce) {
-                    velX *= -1;
+                    XVelocity *= -1;
                     increaseSpeed(1.05);
                     canBounce = false;
                 }
-                contact = true;
             }
         }
-        if (!contact) canBounce = true;
+        if (!contactWithPaddle) canBounce = true;
     }
 
     public boolean outOfBounds(boolean isLeft) {
-        if (isLeft)  return X < -20;
-        else return X > SCENE_X + 20;
+        if (isLeft) return XPosition < -20;
+        else return XPosition > SCENE_X + 20;
     }
 }

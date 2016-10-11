@@ -21,6 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package pong;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class Field extends Group {
 
     boolean gameInProgress = false;
     boolean fieldVisible = false;
-    TimerVisual countdownTimer = new TimerVisual(3);
+    Timer countdownTimer = new Timer(3);
 
     private final ArrayList<Ball> ballList = new ArrayList<>();
     public final ArrayList<Paddle> paddleList = new ArrayList<>();
